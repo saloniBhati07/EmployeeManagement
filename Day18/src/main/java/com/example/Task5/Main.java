@@ -1,8 +1,5 @@
 package com.example.Task5;
 
-import com.example.Task5.Department;
-import com.example.Task5.DepartmentService;
-//department
 public class Main {
 
     public static void main(String[] args) {
@@ -10,38 +7,24 @@ public class Main {
         DepartmentService departmentService =
                 new DepartmentService();
 
-        // Add Department
-        departmentService.addDepartment(
-                new Department(1, "IT")
-        );
+        // 1. Add Department
+        System.out.println("=== ADD DEPARTMENT ===");
 
-        departmentService.addDepartment(
-                new Department(2, "HR")
-        );
-
-        departmentService.addDepartment(
-                new Department(3, "Finance")
-        );
-
-        // View Departments
-        System.out.println("All Departments:");
-
-        for (Department department :
-                departmentService.getAllDepartments()) {
-
-            System.out.println(department);
-        }
-
-        // Search Department
         Department department =
-                departmentService.searchDepartment(2);
+                new Department(6, "Marketing");
 
-        System.out.println("Search Result:");
+        departmentService.addDepartment(department);
 
-        if (department != null) {
-            System.out.println(department);
-        } else {
-            System.out.println("Department not found.");
-        }
+
+        // 2. View All Departments
+        System.out.println("\n=== VIEW DEPARTMENTS ===");
+
+        departmentService.viewDepartments();
+
+
+        // 3. Search Department
+        System.out.println("\n=== SEARCH DEPARTMENT ===");
+
+        departmentService.searchDepartment(5);
     }
 }

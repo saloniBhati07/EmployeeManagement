@@ -1,33 +1,74 @@
 package com.example.Task5;
-import com.example.Task5.Department;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentService {
 
-    private final List<Department> departments = new ArrayList<>();
+    private final DepartmentDAO departmentDAO;
+
+    // Constructor
+    public DepartmentService() {
+        departmentDAO = new DepartmentDAO();
+    }
 
     // Add Department
     public void addDepartment(Department department) {
-        departments.add(department);
-        System.out.println("Department added successfully.");
+
+        if (department == null) {
+            System.out.println("Department cannot be null.");
+            return;
+        }
+
+        if (department.getName() == null ||
+                department.getName().trim().isEmpty()) {
+
+            System.out.println("Department name cannot be empty.");
+            return;
+        }
+
+        departmentDAO.addDepartment(department);
     }
 
-    // View Departments
-    public List<Department> getAllDepartments() {
-        return departments;
+    // View All Departments
+    public void viewDepartments() {
+
+        List<Department> departments =
+                departmentDAO.getAllDepartments();
+
+        if (departments.isEmpty()) {
+
+            System.out.println("No departments found.");
+
+        } else {
+
+            System.out.println("All Departments:");
+
+            for (Department department : departments) {
+                System.out.println(department);
+            }
+        }
     }
 
     // Search Department
-    public Department searchDepartment(int id) {
+    public void searchDepartment(int id) {
 
-        for (Department department : departments) {
-            if (department.getId() == id) {
-                return department;
-            }
+        if (id <= 0) {
+            System.out.println("Invalid Department ID.");
+            return;
         }
 
-        return null;
+        Department department =
+                departmentDAO.searchDepartment(id);
+
+        if (department != null) {
+
+            System.out.println("Department found:");
+            System.out.println(department);
+
+        } else {
+
+            System.out.println(
+                    "Department not found with id: " + id);
+        }
     }
 }
