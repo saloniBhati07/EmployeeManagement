@@ -4,25 +4,23 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DepartmentDAO {
 
-    private static final String URL =
-            "jdbc:postgresql://localhost:5432/employee_db";
-
-    private static final String USER = "postgres";
-
-    private static final String PASSWORD = "Saloni@2007.";
-
+    private static final Logger logger =
+            LoggerFactory.getLogger(DepartmentDAO.class);
 
     // Add Department
     public void addDepartment(Department department) {
 
         String sql =
-                "INSERT INTO department"
-        +" (department_id,department_name) VALUES (?, ?)";
+                "INSERT INTO department " +
+                        "(department_id, department_name) VALUES (?, ?)";
 
         try (Connection connection =
-                     DriverManager.getConnection(URL, USER, PASSWORD);
+                     DBConnectionUtil.getConnection();
 
              PreparedStatement statement =
                      connection.prepareStatement(sql)) {
@@ -32,17 +30,11 @@ public class DepartmentDAO {
 
             statement.executeUpdate();
 
-            System.out.println(
-                    "Department added successfully."
-            );
+            logger.info("Department added successfully.");
 
         } catch (SQLException e) {
 
-            System.out.println(
-                    "Error adding department."
-            );
-
-            e.printStackTrace();
+            logger.error("Error adding department", e);
         }
     }
 
@@ -54,10 +46,11 @@ public class DepartmentDAO {
                 new ArrayList<>();
 
         String sql =
-                "SELECT department_id, department_name FROM department";
+                "SELECT department_id, department_name " +
+                        "FROM department";
 
         try (Connection connection =
-                     DriverManager.getConnection(URL, USER, PASSWORD);
+                     DBConnectionUtil.getConnection();
 
              PreparedStatement statement =
                      connection.prepareStatement(sql);
@@ -79,13 +72,11 @@ public class DepartmentDAO {
                 departments.add(department);
             }
 
+            logger.info("Departments retrieved successfully.");
+
         } catch (SQLException e) {
 
-            System.out.println(
-                    "Error retrieving departments."
-            );
-
-            e.printStackTrace();
+            logger.error("Error retrieving departments", e);
         }
 
         return departments;
@@ -96,10 +87,12 @@ public class DepartmentDAO {
     public Department searchDepartment(int id) {
 
         String sql =
-                "SELECT department_id, department_name"+" FROM department"+" WHERE department_id = ?";
+                "SELECT department_id, department_name " +
+                        "FROM department " +
+                        "WHERE department_id = ?";
 
         try (Connection connection =
-                     DriverManager.getConnection(URL, USER, PASSWORD);
+                     DBConnectionUtil.getConnection();
 
              PreparedStatement statement =
                      connection.prepareStatement(sql)) {
@@ -111,6 +104,10 @@ public class DepartmentDAO {
 
                 if (resultSet.next()) {
 
+                    logger.info(
+                            "Department found with ID: {}", id
+                    );
+
                     return new Department(
                             resultSet.getInt("department_id"),
                             resultSet.getString("department_name")
@@ -118,13 +115,15 @@ public class DepartmentDAO {
                 }
             }
 
-        } catch (SQLException e) {
-
-            System.out.println(
-                    "Error searching department."
+            logger.warn(
+                    "Department not found with ID: {}", id
             );
 
-            e.printStackTrace();
+        } catch (SQLException e) {
+
+            logger.error(
+                    "Error searching department with ID: " + id, e
+            );
         }
 
         return null;
