@@ -1,7 +1,5 @@
 package com.example.Task6;
 
-import com.example.Task6.EmployeeService;
-
 public class Main {
     public static void main(String[] args){
         EmployeeService employeeService= new EmployeeService();
