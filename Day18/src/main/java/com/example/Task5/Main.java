@@ -11,7 +11,7 @@ public class Main {
         System.out.println("=== ADD DEPARTMENT ===");
 
         Department department =
-                new Department(6, "Marketing");
+                new Department(7, "Digital");
 
         departmentService.addDepartment(department);
 
