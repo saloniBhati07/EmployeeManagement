@@ -11,6 +11,7 @@
     <modules>
         <module>Day17-Logging</module>
         <module>Day18</module>
+        <module>Day20</module>
     </modules>
 
     <properties>
